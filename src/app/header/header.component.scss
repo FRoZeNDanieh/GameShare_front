@@ -1,0 +1,30 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .toolbar {
+    min-height: 58px;
+    background-color: rgb(41, 171, 226);
+    border-bottom: 1px solid black;
+
+    div {
+      padding: 0 2.5em 0 2.5em;
+    }
+
+    .link {
+      padding-left: 0.25em;
+      padding-right: 0.25em;
+      cursor: pointer;
+    }
+
+    .link:hover {
+      background-color: rgb(30, 119, 157);
+      border-color: rgb(40, 84, 137);
+    }
+  }
+}

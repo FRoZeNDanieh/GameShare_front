@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "gameshare-2965a": {
+      "hosting": {
+        "GameShare": [
+          "gameshare-2965a"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "gameshare-2965a"
+  }
+}

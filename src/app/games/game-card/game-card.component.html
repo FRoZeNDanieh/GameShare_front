@@ -1,0 +1,19 @@
+<div class="container">
+  <mat-card>
+    <div class="photo">
+      <img
+        mat-card-image
+        src="{{ game.imagenPortada }}"
+        alt="Portada de {{ game.titulo }}"
+      />
+    </div>
+    <mat-card-footer>
+      <div class="title">{{ game.titulo }}</div>
+    </mat-card-footer>
+    <div class="horizontal-line"></div>
+    <mat-card-actions>
+      <button mat-button (click)="addToList(game)">+ AÑADIR A LA LISTA</button>
+      <button mat-button (click)="getGameInfo()">Más info.</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

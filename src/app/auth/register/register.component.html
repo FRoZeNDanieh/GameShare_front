@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="first">
+    <img class="logo" src="../../../assets/logo.png" alt="Logotipo completo" />
+  </div>
+  <div class="second">
+    <h1>GameShare</h1>
+    <div style="width: 420px">
+      <div class="form">
+        <input
+          type="text"
+          placeholder="Correo electrónico"
+          #userEmail
+          required
+        />
+        <input type="text" placeholder="Nombre de usuario" #userName required />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          #userPassword
+          required
+        />
+        <button
+          mat-button
+          (click)="authService.SignUp(userEmail.value, userPassword.value, userName.value)"
+        >
+          Regístrate
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
