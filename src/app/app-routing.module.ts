@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { RouteConstants } from './shared/models/constants/route-constants';
-import { HomeComponent } from './home/home/home.component';
-import { GamesComponent } from './games/games.component';
-import { WelcomeComponent } from './home/welcome/welcome.component';
-import { ListComponent } from './list/list.component';
+import { RouteConstants } from './models/constants/route-constants';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { GamesComponent } from './components/games/games.component';
+import { HomeComponent } from './components/home/home/home.component';
+import { WelcomeComponent } from './components/home/welcome/welcome.component';
+import { ListComponent } from './components/list/list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: RouteConstants.LOGIN_PAGE.path, pathMatch: 'full' },
@@ -15,6 +15,7 @@ const routes: Routes = [
   {
     path: RouteConstants.HOME_PAGE.path, component: HomeComponent, children: [
       { path: '', component: WelcomeComponent },
+      { path: RouteConstants.WELCOME_PAGE.path, component: WelcomeComponent },
       { path: RouteConstants.GAMES_PAGE.path, component: GamesComponent },
       { path: RouteConstants.LIST_PAGE.path, component: ListComponent }
     ]

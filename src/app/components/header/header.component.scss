@@ -1,0 +1,75 @@
+.view {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.toolbar {
+  min-height: 58px;
+  background-color: rgb(41, 171, 226);
+  border-bottom: 1px solid black;
+  padding: 0 2.5em;
+  display: flex;
+  flex-direction: row; /* Cambia esto */
+  align-items: center;
+  justify-content: space-between; /* Añade esto para distribuir los elementos a lo largo de la barra */
+  gap: 1em;
+}
+
+.app-logo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.app-logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 100%;
+}
+
+.app-logo h1 {
+  font-size: 1em;
+  color: white;
+  margin-top: 15px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.user-profile img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 100%;
+  margin-right: 20px;
+}
+
+.logout-button {
+  color: red !important;
+}
+
+.link {
+  display: block;
+  padding: 0.25em 0;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+
+.link:hover {
+  background-color: rgb(30, 119, 157);
+  border-color: rgb(40, 84, 137);
+}

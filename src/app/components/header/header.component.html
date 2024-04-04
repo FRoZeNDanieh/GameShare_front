@@ -1,0 +1,52 @@
+<div class="view">
+  <mat-toolbar color="primary" class="toolbar">
+    <!-- Logo o nombre de la aplicación -->
+    <div class="app-logo">
+      <img src="../../assets/logo.png" alt="Logo de la aplicación" />
+      <h1>GameShare</h1>
+    </div>
+
+    <div class="home">
+      <a (click)="goTo('welcome')" class="link">Inicio</a>
+    </div>
+
+    <div class="games">
+      <a (click)="goTo('games')" class="link">Todos los juegos</a>
+    </div>
+
+    <div class="list">
+      <a (click)="goTo('list')" class="link">Mi lista</a>
+    </div>
+
+    <!-- Ayuda y soporte -->
+    <div class="help">
+      <a (click)="goTo('help')" class="link">Ayuda y soporte</a>
+    </div>
+
+    <!-- Perfil del usuario -->
+    <div class="user-profile">
+      <img
+        width="120"
+        height="120"
+        [src]="profileImageSrc ?? '../../../assets/profile_placeholder.png'"
+        alt="Imagen de perfil"
+      />
+      <button mat-button [matMenuTriggerFor]="menu">Nombre de usuario</button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>person</mat-icon>
+          <span>Ver Perfil</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>edit</mat-icon>
+          <span>Editar Perfil</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon class="logout-button">exit_to_app</mat-icon>
+          <span class="logout-button">Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+  <router-outlet></router-outlet>
+</div>

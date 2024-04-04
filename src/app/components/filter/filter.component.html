@@ -1,0 +1,25 @@
+<div class="container">
+  <form>
+    <mat-form-field appearance="fill">
+      <mat-label>Género</mat-label>
+      <mat-select [(value)]="selectedGenre">
+        <mat-option *ngFor="let element of allGenres" [value]="element">{{
+          element
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de salida</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Desde">
+        <input matEndDate formControlName="end" placeholder="Hasta">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <button mat-raised-button (click)="resetForm()">Borrar</button>
+    <button matButton (click)="filterGames()">Filtrar</button>
+  </form>
+</div>
