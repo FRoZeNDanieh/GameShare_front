@@ -12,23 +12,24 @@ export class RegisterComponent implements OnInit {
   downloadUrl: Observable<string>;
   profileImageSrc: string | ArrayBuffer;
 
-  constructor(public authService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }
 
   signUp(email: string, password: string, username: string, photoURL: File): void {
-    this.authService.SignUp(email, password, username, photoURL);
+    this.authService.signUp(email, password, username, photoURL);
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.profileImageSrc = e.target.result
+  onFileSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.profileImageSrc = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
-    reader.readAsDataURL(file);
   }
 
 }

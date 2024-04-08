@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { Game } from '../../models/Game';
 
 @Injectable({
@@ -9,6 +9,7 @@ import { Game } from '../../models/Game';
 export class FilterService {
 
   private gamesCollection: AngularFirestoreCollection<Game>
+  private filteredGames = new Subject<Game[]>();
 
   constructor(private afs: AngularFirestore) {
     this.gamesCollection = afs.collection('juegos')
@@ -27,5 +28,20 @@ export class FilterService {
     });
 
     return genres;
+  }
+
+  getAllDevelopers(): string[] {
+    let developers: string[] = [];
+
+    this.gamesCollection.ref.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        if (!developers.includes(doc.get('desarrollador').toString())) {
+          developers.push(doc.get('desarrollador').toString())
+        }
+      });
+      developers.sort();
+    });
+
+    return developers;
   }
 }

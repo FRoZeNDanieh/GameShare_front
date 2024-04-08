@@ -6,7 +6,7 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { User } from '../../models/User';
+import { AppUser } from '../../models/AppUser';
 import { RouteConstants } from 'src/app/models/constants/route-constants';
 
 @Injectable({
@@ -14,29 +14,19 @@ import { RouteConstants } from 'src/app/models/constants/route-constants';
 })
 export class AuthService {
 
-  userData: any;
-
   constructor(
     public afs: AngularFirestore,
     public afAuth: AngularFireAuth,
     private storage: AngularFireStorage,
     public router: Router,
     public ngZone: NgZone,
-  ) {
-    this.afAuth.authState.subscribe((user) => {
-      if (user) {
-        this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem('user'));
-      }
-    });
-  }
+  ) { }
 
-  SignIn(email: string, password: string) {
+  signIn(email: string, password: string) {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        this.SetUserData(result.user);
+        this.setUserData(result.user);
         this.afAuth.authState.subscribe((user) => {
           if (user) {
             this.router.navigate([RouteConstants.HOME_PAGE.path]);
@@ -47,26 +37,25 @@ export class AuthService {
       });
   }
 
-  SignUp(email: string, password: string, username: string, photoUrl: File) {
+  signUp(email: string, password: string, username: string, photoUrl: File) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then(userData => {
 
-        var n = Date.now();
-        const filePath = `ProfilePictures/${n}`;
+        const filePath = `ProfilePictures/${new Date().getTime()}_${photoUrl.name}`;
         const fileRef = this.storage.ref(filePath);
 
         this.storage.upload(filePath, photoUrl).then(() => {
           fileRef.getDownloadURL().subscribe((url) => {
             const userRef = this.afs.collection('usuarios').doc(userData.user.uid);
-            userRef.set({ photoURL: url })
+            userRef.update({ photoURL: url })
           })
         })
 
         userData.user.updateProfile({
           displayName: username,
         }).then(() => {
-          this.SetUserData(userData.user);
+          this.setUserData(userData.user);
         }).then(() => {
           this.router.navigate([RouteConstants.HOME_PAGE.path]);
         });
@@ -75,24 +64,20 @@ export class AuthService {
       });
   }
 
-  SetUserData(user: any) {
+  setUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`usuarios/${user.uid}`);
 
-    const userData: User = {
+    const userData: AppUser = {
       uid: user.uid,
       email: user.email,
-      nombre: user.displayName,
-      photo: user.photoURL
+      displayName: user.displayName,
+      photoURL: user.photoURL
     };
+
     return userRef.set(userData, { merge: true });
   }
 
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    return (user !== null && user.emailVerified !== false) ? true : false;
-  }
-
-  SignOut() {
+  signOut() {
     return this.afAuth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate([RouteConstants.LOGIN_PAGE.path]);

@@ -26,12 +26,14 @@
     <!-- Perfil del usuario -->
     <div class="user-profile">
       <img
-        width="120"
-        height="120"
-        [src]="profileImageSrc ?? '../../../assets/profile_placeholder.png'"
+        width="60"
+        height="60"
+        [src]="userProfileImage ?? '../../../assets/profile_placeholder.png'"
         alt="Imagen de perfil"
       />
-      <button mat-button [matMenuTriggerFor]="menu">Nombre de usuario</button>
+      <button mat-button [matMenuTriggerFor]="menu">
+        {{ currentUser?.displayName }}
+      </button>
       <mat-menu #menu="matMenu">
         <button mat-menu-item>
           <mat-icon>person</mat-icon>
@@ -41,7 +43,7 @@
           <mat-icon>edit</mat-icon>
           <span>Editar Perfil</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="onSignOut()">
           <mat-icon class="logout-button">exit_to_app</mat-icon>
           <span class="logout-button">Cerrar Sesión</span>
         </button>

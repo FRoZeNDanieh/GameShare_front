@@ -1,8 +1,8 @@
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, from } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, Query } from '@angular/fire/compat/firestore';
 import { Game } from 'src/app/models/Game';
-import { MessageService } from 'src/app/services/message/message.service';
+import { FilterStateService } from 'src/app/services/filterState/filter-state.service';
 
 @Component({
   selector: 'app-games',
@@ -15,10 +15,10 @@ export class GamesComponent implements OnInit {
 
   games: Observable<Game[]>
 
-  constructor(private afs: AngularFirestore, private messageService: MessageService) {
-    this.subscription = this.messageService.getMessage().subscribe(message => {
+  constructor(private afs: AngularFirestore, private filterStateService: FilterStateService) {
+    this.subscription = this.filterStateService.filterState$.subscribe(message => {
       if (!message.reset) {
-        this.filterGames(message.genre, message.startDate, message.endDate);
+        this.filterGames(message.genre, message.developer, message.startDate, message.endDate, message.search);
       } else {
         this.getAllGames()
       }
@@ -37,14 +37,30 @@ export class GamesComponent implements OnInit {
     console.log(game.titulo)
   }
 
-  filterGames(genre: string, startDate: Date, endDate: Date): void {
-    if (genre != "" && startDate != null) {
-      this.games = this.afs.collection<Game>('juegos', ref => ref.where('genero', '==', genre).where('fecha', '>=', startDate).where('fecha', '<=', endDate)).valueChanges();
-    } else if (genre == "") {
-      this.games = this.afs.collection<Game>('juegos', ref => ref.where('fecha', '>=', startDate).where('fecha', '<=', endDate)).valueChanges();
-    } else if (startDate == null) {
-      this.games = this.afs.collection<Game>('juegos', ref => ref.where('genero', '==', genre)).valueChanges();
+  filterGames(genre: string, developer: string, startDate: Date, endDate: Date, search: string): void {
+    let ref = this.afs.collection<Game>('juegos').ref;
+    let query: Query = ref.orderBy('titulo');
+
+    if (genre != null) {
+      query = query.where('genero', '==', genre);
     }
+
+    if (developer != null)  {
+      query = query.where('desarrollador', '==', developer);
+    }
+
+    if (startDate != null) {
+      query = query.where('fecha', '>=', startDate).where('fecha', '<=', endDate);
+    }
+
+    if (search != null) {
+      query = query.where('titulo', '>=', search).where('titulo', '<=', search + `\uf8ff`);
+    }
+
+    this.games = from(query.get().then(querySnapshot => {
+      return querySnapshot.docs.map(doc => doc.data() as Game)
+    }));
+
   }
 
 }

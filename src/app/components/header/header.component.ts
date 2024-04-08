@@ -1,9 +1,10 @@
-import { User } from 'firebase/auth';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { RouteConstants } from 'src/app/models/constants/route-constants';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { User } from 'firebase/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-header',
@@ -12,13 +13,19 @@ import { RouteConstants } from 'src/app/models/constants/route-constants';
 })
 export class HeaderComponent implements OnInit {
 
-  profileImageSrc: string | ArrayBuffer;
   currentUser: User;
+  userProfileImage: string;
 
-  constructor(private router: Router, private afAuth: AngularFireAuth, private afs: AngularFirestore) {
-    afAuth.authState.subscribe(user => {
-      this.currentUser = user;
-      this.getUserInfo();
+  constructor(private router: Router, private authService: AuthService, public afAuth: AngularFireAuth, private db: AngularFirestore) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.db.collection('usuarios').doc(user.uid).valueChanges().subscribe((userData: any) => {
+          console.log('User data: ', userData);
+          console.log('Photo URL: ', userData.photoURL);
+          this.currentUser = user;
+          this.userProfileImage = userData.photoURL;
+        })
+      }
     });
   }
 
@@ -29,9 +36,7 @@ export class HeaderComponent implements OnInit {
     this.router.navigate([RouteConstants.HOME_PAGE.path + '/' + route])
   }
 
-  getUserInfo(): void {
-    this.afs.collection("usuarios").doc(this.currentUser.uid).get().subscribe(user => {
-      console.log(user.get("photo"))
-    })
+  onSignOut() {
+    this.authService.signOut();
   }
 }
