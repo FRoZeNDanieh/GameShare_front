@@ -1,69 +1,98 @@
 .container {
   width: 100%;
   height: 100%;
+}
 
-  .title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-image: linear-gradient(
-      to right,
-      #29abe2,
-      #86bced,
-      #bbd0f4,
-      #e2e6f9,
-      #ffffff
-    );
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-image: linear-gradient(
+    to right,
+    #29abe2,
+    #86bced,
+    #bbd0f4,
+    #e2e6f9,
+    #ffffff
+  );
+}
 
-    h1 {
-      padding: 15px 15px 15px 15px;
-      font-size: 50px;
-      font-weight: bolder;
-      margin-bottom: 0px;
-    }
-  }
+.title h1 {
+  padding: 15px;
+  font-size: 50px;
+  font-weight: bolder;
+  margin-bottom: 0;
+  color: #000080;
+}
 
-  .row {
-    display: flex;
-    flex-direction: row;
+.row {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
 
-    .column1 {
-      display: inline-block;
-      width: 30%;
-      margin-left: 15px;
+.column1 {
+  display: inline-block;
+  width: auto;
+  margin: 15px;
+}
 
-      .photo {
-        height: auto;
-        width: auto;
-        border: 1px solid
-          linear-gradient(to right, #29abe2, #86bced, #bbd0f4, #e2e6f9, #ffffff);
-        white-space: nowrap;
-        text-align: center;
-        margin-top: 15px;
-      }
+.photo {
+  height: auto;
+  width: auto;
+  white-space: nowrap;
+  text-align: center;
+  margin: 25px;
+}
 
-      .helper {
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-      }
+.photo img {
+  border: 6px solid #29abe2;
+  background: #3a6f9a;
+  vertical-align: middle;
+  max-height: 500px;
+  max-width: 500px;
+}
 
-      img {
-        background: #3a6f9a;
-        vertical-align: middle;
-        max-height: 500px;
-        max-width: 500px;
-      }
-    }
+.column2 {
+  display: inline-block;
+  flex-direction: column wrap;
+  align-items: flex;
+  justify-content: center;
+  width: 70%;
+  margin-left: 15px;
+}
 
-    .vertical-line {
-      border: 1px solid black;
-    }
+.column2 .image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25px;
+}
 
-    .column2 {
-      display: inline-block;
-      width: 70%;
-      margin-left: 15px;
-    }
-  }
+.column2 img {
+  border: 6px solid #29abe2;
+  background: #3a6f9a;
+  vertical-align: middle;
+  width: 70%;
+  height: auto;
+}
+
+.column2 .description {
+  font-size: 20px;
+}
+
+.stars {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.star {
+  cursor: pointer;
+  font-size: 50px;
+  color: #ccc;
+  text-shadow: 0 0 5px #000;
+}
+
+.star.gold {
+  color: gold;
 }

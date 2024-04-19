@@ -8,4 +8,39 @@
       [game]="game"
     ></app-game-card>
   </div>
+  <div class="flex-container">
+    <div class="flex-item">
+      <span>Mostrando </span>
+      <mat-select
+        [(value)]="selectedPageSize"
+        (selectionChange)="loadGames()"
+        class="select-style"
+      >
+        <mat-option *ngFor="let size of pageSizes" [value]="size">{{
+          size
+        }}</mat-option>
+      </mat-select>
+      <span> juegos de {{ totalGames }}</span>
+    </div>
+    <div>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="prevPage()"
+        [disabled]="!prevStartAt || prevStartAt.length === 0"
+        class="button-style"
+      >
+        Página anterior
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="nextPage()"
+        [disabled]="noMoreGames"
+        class="button-style"
+      >
+        Siguiente página
+      </button>
+    </div>
+  </div>
 </div>

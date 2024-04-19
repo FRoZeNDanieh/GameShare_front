@@ -8,7 +8,10 @@ export interface Game {
   desarrollador: string;
   editor: string;
   fecha: Timestamp;
+  fechaFormatted?: string;
   imagenPortada: string;
   imagen: string;
   pegi: number;
+  estado?: string;
+  rating?: number;
 }

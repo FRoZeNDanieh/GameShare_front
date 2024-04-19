@@ -38,6 +38,7 @@ import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { AuthService } from './services/auth/auth.service';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { AuthService } from './services/auth/auth.service';
   providers: [AuthService,
     MatDatepickerModule,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

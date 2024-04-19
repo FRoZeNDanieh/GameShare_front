@@ -8,17 +8,41 @@
   <div class="row">
     <div class="column1">
       <div class="photo">
-        <span class="helper"></span
-        ><img
+        <img
           mat-card-image
           src="{{ game.imagenPortada }}"
           alt="Portada de {{ game.titulo }}"
         />
       </div>
+      <div class="game-details">
+        <p>Desarrollador: {{ game.desarrollador }}</p>
+        <p>Fecha de salida: {{ game.fechaFormatted }}</p>
+        <p>Editor: {{ game.editor }}</p>
+        <p>PEGI: {{ game.pegi }}</p>
+      </div>
     </div>
-    <div class="vertical-line"></div>
     <div class="column2">
-      <p>PRUEBA</p>
+      <div class="image-container">
+        <img src="{{ game.imagen }}" alt="Portada de {{ game.titulo }}" />
+      </div>
+      <div class="description">
+        <p>{{ game.descripcion }}</p>
+      </div>
+      <div *ngIf="game && jugando[game.uid]">
+        <div class="stars">
+          <span
+            class="star"
+            *ngFor="
+              let star of [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+            "
+            [class.gold]="game.rating >= star"
+            (mouseover)="highlightStars(star)"
+            (click)="setRating(star)"
+          >
+            ☆
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

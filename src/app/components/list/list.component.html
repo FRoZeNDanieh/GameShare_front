@@ -1,11 +1,34 @@
 <div class="container">
   <h1>MI LISTA</h1>
-  <div class="game-list">
-    <app-game-card
-      *ngFor="let game of games | async"
-      (click)="editGame(game)"
-      [game]="game"
-    ></app-game-card>
+  <div *ngIf="(jugandoGames | async)?.length > 0">
+    <h2>Jugando</h2>
+    <div class="game-list">
+      <app-game-card
+        *ngFor="let game of jugandoGames | async"
+        (click)="editGame(game)"
+        [game]="game"
+      ></app-game-card>
+    </div>
+  </div>
+  <div *ngIf="(terminadoGames | async)?.length > 0">
+    <h2>Terminados</h2>
+    <div class="game-list">
+      <app-game-card
+        *ngFor="let game of terminadoGames | async"
+        (click)="editGame(game)"
+        [game]="game"
+      >
+      </app-game-card>
+    </div>
+  </div>
+  <div *ngIf="(abandonadoGames | async)?.length > 0">
+    <h2>Abandonados</h2>
+    <div class="game-list">
+      <app-game-card
+        *ngFor="let game of abandonadoGames | async"
+        (click)="editGame(game)"
+        [game]="game"
+      ></app-game-card>
+    </div>
   </div>
 </div>
-

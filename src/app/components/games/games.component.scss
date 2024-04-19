@@ -11,3 +11,28 @@
     overflow: auto;
   }
 }
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-item {
+  display: flex;
+  align-items: center;
+}
+
+.select-style {
+  width: 50px;
+  margin: 0 10px;
+}
+
+.button-style {
+  background-color: rgb(41, 171, 226);
+  margin-right: 10px;
+}
+
+.button-style:disabled {
+  background-color: lightgray;
+}

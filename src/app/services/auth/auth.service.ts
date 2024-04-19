@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { AppUser } from '../../models/AppUser';
 import { RouteConstants } from 'src/app/models/constants/route-constants';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -55,7 +56,7 @@ export class AuthService {
         userData.user.updateProfile({
           displayName: username,
         }).then(() => {
-          this.setUserData(userData.user);
+          this.setUserData(userData.user, true);
         }).then(() => {
           this.router.navigate([RouteConstants.HOME_PAGE.path]);
         });
@@ -64,17 +65,35 @@ export class AuthService {
       });
   }
 
-  setUserData(user: any) {
+  setUserData(user: any, isSignUp: boolean = false) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`usuarios/${user.uid}`);
 
-    const userData: AppUser = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
-    };
+    // Obtenemos los datos actuales del usuario en Firestore solo si no es un registro.
+    if (!isSignUp) {
+      return firstValueFrom(userRef.get()).then((doc) => {
+        if (doc.exists) {
+          const userData: AppUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: doc.data().photoURL
+          };
 
-    return userRef.set(userData, { merge: true });
+          return userRef.set(userData, { merge: true });
+        } else {
+          throw new Error('No such document!');
+        }
+      });
+    } else {
+      const userData: AppUser = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL
+      };
+
+      return userRef.set(userData, { merge: true });
+    }
   }
 
   signOut() {

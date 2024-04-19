@@ -1,6 +1,6 @@
-import { Observable, Subscription, from } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, Query } from '@angular/fire/compat/firestore';
+import { Observable, Subscription, from, map } from 'rxjs';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection, Query } from '@angular/fire/compat/firestore';
 import { Game } from 'src/app/models/Game';
 import { FilterStateService } from 'src/app/services/filterState/filter-state.service';
 
@@ -12,25 +12,87 @@ import { FilterStateService } from 'src/app/services/filterState/filter-state.se
 export class GamesComponent implements OnInit {
 
   subscription: Subscription = new Subscription();
-
   games: Observable<Game[]>
+
+  totalGames: number;
+
+  lastDoc: any;
+  prevStartAt: any[] = [];
+  config: { pageSize: number, startAt: any, endBefore: any } = {
+    pageSize: 10,
+    startAt: null,
+    endBefore: null,
+  };
+
+  pageSizes = [5, 10, 20];
+  selectedPageSize = this.pageSizes[2];
+
+  noMoreGames = false; // Agregamos una nueva variable para rastrear si hay más juegos.
 
   constructor(private afs: AngularFirestore, private filterStateService: FilterStateService) {
     this.subscription = this.filterStateService.filterState$.subscribe(message => {
       if (!message.reset) {
         this.filterGames(message.genre, message.developer, message.startDate, message.endDate, message.search);
       } else {
-        this.getAllGames()
+        this.loadGames();
       }
     });
   }
 
   ngOnInit(): void {
-    this.getAllGames();
+    this.afs.collection('juegos').get().subscribe((res) => {
+      this.totalGames = res.docs.length;
+      this.loadGames();
+    });
   }
 
-  getAllGames(): void {
-    this.games = this.afs.collection<Game>('juegos', ref => ref.orderBy("titulo")).valueChanges();
+  loadGames() {
+    let collection: AngularFirestoreCollection<Game>;
+    this.config.pageSize = this.selectedPageSize;
+
+    if (this.config.startAt) {
+      collection = this.afs.collection('juegos', ref => ref.orderBy('titulo').startAfter(this.config.startAt).limit(this.config.pageSize));
+    } else {
+      collection = this.afs.collection('juegos', ref => ref.orderBy('titulo').limit(this.config.pageSize));
+    }
+
+    this.games = collection.snapshotChanges().pipe(
+      map(actions => {
+        let games = actions.map(a => {
+          const data = a.payload.doc.data() as Game;
+          const id = a.payload.doc.id;
+          this.lastDoc = a.payload.doc;
+
+          return { id, ...data };
+        });
+
+        // Verificamos si hay más juegos después del último juego que hemos recuperado.
+        this.afs.collection('juegos', ref => ref.orderBy('titulo').startAfter(this.lastDoc).limit(1)).get().subscribe((nextGames) => {
+          if (nextGames.docs.length > 0) {
+            this.noMoreGames = false;
+          } else {
+            this.noMoreGames = true;
+          }
+        });
+
+        return games;
+      })
+    );
+  }
+
+  nextPage() {
+    if (!this.noMoreGames) { // Solo avanzamos a la siguiente página si hay más juegos.
+      this.prevStartAt.push(this.config.startAt);
+      this.config.startAt = this.lastDoc;
+      this.loadGames();
+    }
+  }
+
+  prevPage() {
+    if (this.prevStartAt.length > 0) {
+      this.config.startAt = this.prevStartAt.pop();
+      this.loadGames();
+    }
   }
 
   editGame(game: Game): void {
@@ -45,7 +107,7 @@ export class GamesComponent implements OnInit {
       query = query.where('genero', '==', genre);
     }
 
-    if (developer != null)  {
+    if (developer != null) {
       query = query.where('desarrollador', '==', developer);
     }
 

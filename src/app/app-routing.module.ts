@@ -7,13 +7,14 @@ import { GamesComponent } from './components/games/games.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { WelcomeComponent } from './components/home/welcome/welcome.component';
 import { ListComponent } from './components/list/list.component';
+import { AuthGuard } from './services/auth/auth-guard.service';
 
 const routes: Routes = [
   { path: '', redirectTo: RouteConstants.LOGIN_PAGE.path, pathMatch: 'full' },
   { path: RouteConstants.LOGIN_PAGE.path, component: LoginComponent },
   { path: RouteConstants.REGISTER_PAGE.path, component: RegisterComponent },
   {
-    path: RouteConstants.HOME_PAGE.path, component: HomeComponent, children: [
+    path: RouteConstants.HOME_PAGE.path, component: HomeComponent, canActivateChild: [AuthGuard], children: [
       { path: '', component: WelcomeComponent },
       { path: RouteConstants.WELCOME_PAGE.path, component: WelcomeComponent },
       { path: RouteConstants.GAMES_PAGE.path, component: GamesComponent },
