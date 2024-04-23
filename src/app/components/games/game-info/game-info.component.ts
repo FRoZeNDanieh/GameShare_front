@@ -1,10 +1,10 @@
+import { Game } from './../../../models/Game';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, Inject } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { User } from 'firebase/auth';
-import { Game } from 'src/app/models/Game';
 import { EstadoJuego } from 'src/app/models/constants/EstadoJuego';
 
 @Component({
@@ -17,6 +17,9 @@ export class GameInfoComponent implements OnInit {
   currentUser: User;
   game: Game;
   jugando: { [gameId: string]: EstadoJuego }
+
+  reviewText: string;
+  reviews: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<GameInfoComponent>,
@@ -38,12 +41,21 @@ export class GameInfoComponent implements OnInit {
         let fechaSalida = this.game.fecha.toDate();
         // Formatea la fecha al formato español
         this.game.fechaFormatted = this.datePipe.transform(fechaSalida, 'dd/MM/yyyy');
+
+        // Comprueba si el juego está en la colección 'jugando' del usuario actual.
+        if (this.jugando && this.jugando[this.game.uid]) {
+          this.afs.collection('usuarios').doc(this.currentUser.uid).collection('jugando').doc(this.game.uid).valueChanges().subscribe(juego => {
+            if (juego['rating']) {
+              this.game.rating = juego['rating'];
+            }
+          });
+        }
+
+        this.afs.collection('reviews', ref => ref.where('juegoId', '==', this.game.uid)).valueChanges().subscribe(reviews => {
+          this.reviews = reviews;
+        })
       }
     });
-  }
-
-  highlightStars(star: number) {
-    this.game.rating = star;
   }
 
   setRating(star: number) {
@@ -56,5 +68,26 @@ export class GameInfoComponent implements OnInit {
       .catch((error) => {
         console.log("Error updating rating: ", error);
       });
+  }
+
+  submitReview() {
+    if (this.reviewText) {
+      const reviewData = {
+        usuarioId: this.currentUser.uid,
+        juegoId: this.game.uid,
+        review: this.reviewText,
+        username: this.currentUser.displayName,
+        rating: this.game.rating,
+        fecha: new Date().toISOString()
+      };
+
+      this.afs.collection('reviews').add(reviewData).then(() => {
+        console.log('Reseña publicada con éxito');
+        this.reviewText = '';
+      })
+        .catch(error => {
+          console.error('Error al publicar la reseña: ', error);
+        })
+    }
   }
 }

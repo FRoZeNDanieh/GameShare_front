@@ -1,6 +1,5 @@
 <div class="view">
   <mat-toolbar color="primary" class="toolbar">
-    <!-- Logo o nombre de la aplicación -->
     <div class="app-logo">
       <img src="../../assets/logo.png" alt="Logo de la aplicación" />
       <h1>GameShare</h1>
@@ -18,12 +17,6 @@
       <a (click)="goTo('list')" class="link">Mi lista</a>
     </div>
 
-    <!-- Ayuda y soporte -->
-    <div class="help">
-      <a (click)="goTo('help')" class="link">Ayuda y soporte</a>
-    </div>
-
-    <!-- Perfil del usuario -->
     <div class="user-profile">
       <img
         width="60"
@@ -35,13 +28,9 @@
         {{ currentUser?.displayName }}
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="goTo('profile')">
           <mat-icon>person</mat-icon>
           <span>Ver Perfil</span>
-        </button>
-        <button mat-menu-item>
-          <mat-icon>edit</mat-icon>
-          <span>Editar Perfil</span>
         </button>
         <button mat-menu-item (click)="onSignOut()">
           <mat-icon class="logout-button">exit_to_app</mat-icon>

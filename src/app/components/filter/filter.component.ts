@@ -15,6 +15,8 @@ export class FilterComponent implements OnInit {
   searchControl = new FormControl();
   genreControl = new FormControl();
   developerControl = new FormControl();
+  editorControl = new FormControl();
+  pegiControl = new FormControl();
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null)
@@ -22,12 +24,16 @@ export class FilterComponent implements OnInit {
 
   allGenres: string[];
   allDevelopers: string[];
+  allEditors: string[];
+  allPegi: number[];
 
   constructor(private filterService: FilterService, private filterStateService: FilterStateService) { }
 
-  ngOnInit(): void {
-    this.allGenres = this.filterService.getAllGenres();
-    this.allDevelopers = this.filterService.getAllDevelopers();
+  async ngOnInit(): Promise<void> {
+    this.allGenres = await this.filterService.getAllGenres();
+    this.allDevelopers = await this.filterService.getAllDevelopers();
+    this.allEditors = await this.filterService.getAllEditors();
+    this.allPegi = await this.filterService.getAllPegi();
 
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
@@ -48,6 +54,20 @@ export class FilterComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(() => {
       this.updateFilterState();
+    });
+
+    this.editorControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.updateFilterState();
+    });
+
+    this.pegiControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.updateFilterState();
     })
 
     this.range.valueChanges.pipe(
@@ -63,6 +83,8 @@ export class FilterComponent implements OnInit {
       reset: false,
       genre: this.genreControl.value,
       developer: this.developerControl.value,
+      editor: this.editorControl.value,
+      pegi: this.pegiControl.value,
       startDate: this.range.value.start,
       endDate: this.range.value.end,
       search: this.searchControl.value
@@ -75,6 +97,8 @@ export class FilterComponent implements OnInit {
     this.searchControl.reset();
     this.genreControl.reset();
     this.developerControl.reset();
+    this.editorControl.reset();
+    this.pegiControl.reset();
     this.range.reset();
   }
 }

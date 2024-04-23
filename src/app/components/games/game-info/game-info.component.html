@@ -15,10 +15,22 @@
         />
       </div>
       <div class="game-details">
-        <p>Desarrollador: {{ game.desarrollador }}</p>
-        <p>Fecha de salida: {{ game.fechaFormatted }}</p>
-        <p>Editor: {{ game.editor }}</p>
-        <p>PEGI: {{ game.pegi }}</p>
+        <h2>Datos</h2>
+        <p>
+          <span>Género:</span> <span>{{ game.genero }}</span>
+        </p>
+        <p>
+          <span>Desarrollador:</span> <span>{{ game.desarrollador }}</span>
+        </p>
+        <p>
+          <span>Fecha de salida:</span> <span>{{ game.fechaFormatted }}</span>
+        </p>
+        <p>
+          <span>Editor:</span> <span>{{ game.editor }}</span>
+        </p>
+        <p>
+          <span>PEGI:</span> <span>{{ game.PEGI }}</span>
+        </p>
       </div>
     </div>
     <div class="column2">
@@ -26,21 +38,56 @@
         <img src="{{ game.imagen }}" alt="Portada de {{ game.titulo }}" />
       </div>
       <div class="description">
+        <h2>Descripción</h2>
         <p>{{ game.descripcion }}</p>
       </div>
       <div *ngIf="game && jugando[game.uid]">
         <div class="stars">
+          <h2 class="score">Tu puntuación</h2>
           <span
             class="star"
             *ngFor="
               let star of [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
             "
             [class.gold]="game.rating >= star"
-            (mouseover)="highlightStars(star)"
             (click)="setRating(star)"
           >
             ☆
           </span>
+        </div>
+        <div class="review-section">
+          <h2>Tu reseña</h2>
+          <textarea
+            id="review-textarea"
+            [(ngModel)]="reviewText"
+            placeholder="Escribe tu reseña aquí..."
+          ></textarea>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="submitReview()"
+            class="button-style"
+          >
+            Publicar reseña
+          </button>
+        </div>
+      </div>
+      <div class="reviews">
+        <h2>Reseñas de otros usuarios</h2>
+        <div *ngFor="let review of reviews" class="review-box">
+          <div class="review-header">
+            <span>{{ review.username }}</span>
+            <span *ngIf="review.rating">{{ review.rating }}/10</span>
+            <span>{{ review.fecha | date : "short" }}</span>
+          </div>
+          <div class="review-body">
+            <p>{{ review.review }}</p>
+          </div>
+        </div>
+        <div *ngIf="reviews.length === 0" class="no-reviews">
+          <p>
+            Aún no hay reseñas para este juego. ¡Sé el primero en dejar una!
+          </p>
         </div>
       </div>
     </div>

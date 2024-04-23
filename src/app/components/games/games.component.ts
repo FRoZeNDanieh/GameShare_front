@@ -1,5 +1,5 @@
 import { Observable, Subscription, from, map } from 'rxjs';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, Query } from '@angular/fire/compat/firestore';
 import { Game } from 'src/app/models/Game';
 import { FilterStateService } from 'src/app/services/filterState/filter-state.service';
@@ -32,7 +32,7 @@ export class GamesComponent implements OnInit {
   constructor(private afs: AngularFirestore, private filterStateService: FilterStateService) {
     this.subscription = this.filterStateService.filterState$.subscribe(message => {
       if (!message.reset) {
-        this.filterGames(message.genre, message.developer, message.startDate, message.endDate, message.search);
+        this.filterGames(message.genre, message.developer, message.editor, message.pegi, message.startDate, message.endDate, message.search);
       } else {
         this.loadGames();
       }
@@ -99,9 +99,15 @@ export class GamesComponent implements OnInit {
     console.log(game.titulo)
   }
 
-  filterGames(genre: string, developer: string, startDate: Date, endDate: Date, search: string): void {
+  filterGames(genre: string, developer: string, editor: string, pegi: number, startDate: Date, endDate: Date, search: string): void {
     let ref = this.afs.collection<Game>('juegos').ref;
-    let query: Query = ref.orderBy('titulo');
+    let query: Query;
+
+    if (startDate != null && endDate != null) {
+      query = ref.orderBy('fecha').where('fecha', '>=', startDate).where('fecha', '<=', endDate);
+    } else {
+      query = ref.orderBy('titulo');
+    }
 
     if (genre != null) {
       query = query.where('genero', '==', genre);
@@ -111,8 +117,14 @@ export class GamesComponent implements OnInit {
       query = query.where('desarrollador', '==', developer);
     }
 
-    if (startDate != null) {
-      query = query.where('fecha', '>=', startDate).where('fecha', '<=', endDate);
+    if (editor != null) {
+      query = query.where('editor', '==', editor);
+    }
+
+    if (pegi != null) {
+      let pegiNumber = Number(pegi);
+      if (!isNaN(pegiNumber))
+        query = query.where('PEGI', '==', pegiNumber);
     }
 
     if (search != null) {

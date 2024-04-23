@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+    <div class="column1">
+      <div class="photo">
+        <img
+          mat-card-image
+          [src]="userProfileImage ?? '../../../assets/profile_placeholder.png'"
+          alt="Imagen de perfil"
+        />
+      </div>
+      <div class="user-details">
+        <h2>Información del usuario</h2>
+        <p>
+          <span>Nombre de usuario:</span>
+          <span>{{ currentUser?.displayName }}</span>
+        </p>
+        <p>
+          <span>Correo electrónico:</span> <span>{{ currentUser?.email }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="column2">
+      <div class="statistics">
+        <h2>Estadísticas</h2>
+        <div class="card-container">
+          <mat-card
+            class="stat-card"
+            *ngFor="let stat of statsObservables | keyvalue"
+          >
+            <mat-card-header class="stat-card-header">
+              <mat-card-title>{{ stat.key }}</mat-card-title>
+            </mat-card-header>
+            <mat-divider class="stat-card-divider"></mat-divider>
+            <mat-card-content class="stat-card-content">
+              <p>{{ stat.value | async }}</p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+      <div class="actions">
+        <h2>Acciones</h2>
+        <h3>Editar Perfil</h3>
+        <div class="button-container">
+          <button
+            mat-raised-button
+            class="custom-button"
+            (click)="openChangePhotoDialog()"
+          >
+            Cambiar Foto
+          </button>
+          <button
+            mat-raised-button
+            class="custom-button"
+            (click)="changeUsername()"
+          >
+            Cambiar Nombre de Usuario
+          </button>
+          <button
+            mat-raised-button
+            class="custom-button"
+            (click)="changePassword()"
+          >
+            Cambiar Contraseña
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

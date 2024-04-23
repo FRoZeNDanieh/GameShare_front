@@ -22,4 +22,8 @@ export class RouteConstants {
   public static readonly WELCOME_PAGE = {
     path: 'welcome'
   }
+
+  public static readonly PROFILE_PAGE = {
+    path: 'profile'
+  }
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
@@ -19,6 +19,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -39,6 +41,8 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { AuthService } from './services/auth/auth.service';
 import { DatePipe } from '@angular/common';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ChangePhotoDialogComponent } from './components/modals/change-photo-dialog/change-photo-dialog.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +57,8 @@ import { DatePipe } from '@angular/common';
     GameInfoComponent,
     ListComponent,
     FilterComponent,
+    ProfileComponent,
+    ChangePhotoDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,6 +80,8 @@ import { DatePipe } from '@angular/common';
     MatNativeDateModule,
     MatMenuModule,
     MatInputModule,
+    MatExpansionModule,
+    MatListModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
@@ -82,6 +90,7 @@ import { DatePipe } from '@angular/common';
     MatDatepickerModule,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    { provide: LOCALE_ID, useValue: 'es' },
     DatePipe
   ],
   bootstrap: [AppComponent]

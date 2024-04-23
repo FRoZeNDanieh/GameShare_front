@@ -16,20 +16,18 @@ export class HeaderComponent implements OnInit {
   currentUser: User;
   userProfileImage: string;
 
-  constructor(private router: Router, private authService: AuthService, public afAuth: AngularFireAuth, private db: AngularFirestore) {
+  constructor(private router: Router, private authService: AuthService, public afAuth: AngularFireAuth, private db: AngularFirestore) { }
+
+
+  ngOnInit(): void {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.db.collection('usuarios').doc(user.uid).valueChanges().subscribe((userData: any) => {
-          console.log('User data: ', userData);
-          console.log('Photo URL: ', userData.photoURL);
           this.currentUser = user;
           this.userProfileImage = userData.photoURL;
         })
       }
     });
-  }
-
-  ngOnInit(): void {
   }
 
   goTo(route: string): void {

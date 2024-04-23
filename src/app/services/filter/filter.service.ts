@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
-import { Observable, Subject, map } from 'rxjs';
 import { Game } from '../../models/Game';
 
 @Injectable({
@@ -9,39 +8,76 @@ import { Game } from '../../models/Game';
 export class FilterService {
 
   private gamesCollection: AngularFirestoreCollection<Game>
-  private filteredGames = new Subject<Game[]>();
 
   constructor(private afs: AngularFirestore) {
     this.gamesCollection = afs.collection('juegos')
   }
 
-  getAllGenres(): string[] {
+  getAllGenres(): Promise<string[]> {
     let genres: string[] = [];
 
-    this.gamesCollection.ref.get().then(function (querySnapshot) {
+    return this.gamesCollection.ref.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
-        if (!genres.includes(doc.get('genero').toString())) {
-          genres.push(doc.get('genero').toString());
+        if (doc.exists) {
+          let genre = doc.get('genero');
+          if (genre && !genres.includes(genre.toString())) {
+            genres.push(genre.toString());
+          }
         }
       });
-      genres.sort()
+      genres.sort();
+      return genres;
     });
-
-    return genres;
   }
 
-  getAllDevelopers(): string[] {
+  getAllDevelopers(): Promise<string[]> {
     let developers: string[] = [];
 
-    this.gamesCollection.ref.get().then(function (querySnapshot) {
+    return this.gamesCollection.ref.get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
-        if (!developers.includes(doc.get('desarrollador').toString())) {
-          developers.push(doc.get('desarrollador').toString())
+        if (doc.exists) {
+          let developer = doc.get('desarrollador');
+          if (developer && !developers.includes(developer.toString())) {
+            developers.push(developer.toString());
+          }
         }
       });
       developers.sort();
+      return developers;
     });
+  }
 
-    return developers;
+  getAllEditors(): Promise<string[]> {
+    let editors: string[] = [];
+
+    return this.gamesCollection.ref.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        if (doc.exists) {
+          let editor = doc.get('editor');
+          if (editor && !editors.includes(editor.toString())) {
+            editors.push(editor.toString());
+          }
+        }
+      });
+      editors.sort();
+      return editors;
+    });
+  }
+
+  getAllPegi(): Promise<number[]> {
+    let editors: number[] = [];
+
+    return this.gamesCollection.ref.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        if (doc.exists) {
+          let editor = doc.get('PEGI');
+          if (editor && !editors.includes(editor.toString())) {
+            editors.push(editor.toString());
+          }
+        }
+      });
+      editors.sort((a, b) => a - b);
+      return editors;
+    });
   }
 }

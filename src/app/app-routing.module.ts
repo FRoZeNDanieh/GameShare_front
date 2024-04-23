@@ -8,6 +8,7 @@ import { HomeComponent } from './components/home/home/home.component';
 import { WelcomeComponent } from './components/home/welcome/welcome.component';
 import { ListComponent } from './components/list/list.component';
 import { AuthGuard } from './services/auth/auth-guard.service';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [
   { path: '', redirectTo: RouteConstants.LOGIN_PAGE.path, pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
       { path: '', component: WelcomeComponent },
       { path: RouteConstants.WELCOME_PAGE.path, component: WelcomeComponent },
       { path: RouteConstants.GAMES_PAGE.path, component: GamesComponent },
-      { path: RouteConstants.LIST_PAGE.path, component: ListComponent }
+      { path: RouteConstants.LIST_PAGE.path, component: ListComponent },
+      { path: RouteConstants.PROFILE_PAGE.path, component: ProfileComponent },
     ]
   },
 ]

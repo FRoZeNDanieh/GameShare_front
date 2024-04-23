@@ -11,6 +11,8 @@ export class FilterStateService {
     reset: true,
     genre: null,
     developer: null,
+    editor: null,
+    pegi: null,
     startDate: null,
     endDate: null,
     search: null,
