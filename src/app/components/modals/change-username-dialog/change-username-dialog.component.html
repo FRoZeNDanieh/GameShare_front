@@ -1,0 +1,28 @@
+<mat-dialog-content>
+  <div class="title-container">
+    <h2 class="title">Cambiar nombre de usuario</h2>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form [formGroup]="changeUsernameForm" (ngSubmit)="onChangeUsername()">
+    <mat-form-field class="form-field">
+      <mat-label>Nuevo nombre de usuario</mat-label>
+      <input matInput type="text" formControlName="newUsername" />
+      <mat-error
+        *ngIf="changeUsernameForm.get('newUsername').hasError('required')"
+      >
+        Este campo es obligatorio
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      type="submit"
+      class="custom-button"
+      [disabled]="!changeUsernameForm.valid"
+    >
+      Cambiar nombre de usuario
+    </button>
+  </form>
+</mat-dialog-content>

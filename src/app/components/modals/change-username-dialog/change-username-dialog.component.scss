@@ -15,26 +15,21 @@
   right: 10px;
 }
 
-.image-container {
+mat-form-field {
+  width: 70%;
+  margin: 0 auto 20px auto;
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.new-photo {
-  border: 6px solid #29abe2;
-  background: #3a6f9a;
-  vertical-align: middle;
-  height: 250px;
-  width: 250px;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 100%;
-  margin: 20px;
+  flex-direction: column;
 }
 
 .custom-button {
   background-color: #29abe2;
   color: white;
   margin: 15px;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
 }

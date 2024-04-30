@@ -7,7 +7,7 @@ import { GamesComponent } from './components/games/games.component';
 import { HomeComponent } from './components/home/home/home.component';
 import { WelcomeComponent } from './components/home/welcome/welcome.component';
 import { ListComponent } from './components/list/list.component';
-import { AuthGuard } from './services/auth/auth-guard.service';
+import { AuthGuard } from './services/auth/auth-guard/auth-guard.service';
 import { ProfileComponent } from './components/profile/profile.component';
 
 const routes: Routes = [

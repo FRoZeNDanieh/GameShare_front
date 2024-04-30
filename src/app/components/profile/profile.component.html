@@ -51,16 +51,26 @@
           <button
             mat-raised-button
             class="custom-button"
-            (click)="changeUsername()"
+            (click)="openChangeUsernameDialog()"
           >
             Cambiar Nombre de Usuario
           </button>
           <button
             mat-raised-button
             class="custom-button"
-            (click)="changePassword()"
+            (click)="openChangePassDialog()"
           >
             Cambiar Contraseña
+          </button>
+        </div>
+        <h3>Borrar Perfil</h3>
+        <div class="button-container">
+          <button
+            mat-raised-button
+            class="custom-button-erase"
+            (click)="onDeleteAccount()"
+          >
+            Eliminar cuenta
           </button>
         </div>
       </div>

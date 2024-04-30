@@ -21,6 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
@@ -43,6 +44,8 @@ import { AuthService } from './services/auth/auth.service';
 import { DatePipe } from '@angular/common';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePhotoDialogComponent } from './components/modals/change-photo-dialog/change-photo-dialog.component';
+import { ChangePassDialogComponent } from './components/modals/change-pass-dialog/change-pass-dialog.component';
+import { ChangeUsernameDialogComponent } from './components/modals/change-username-dialog/change-username-dialog.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +62,8 @@ import { ChangePhotoDialogComponent } from './components/modals/change-photo-dia
     FilterComponent,
     ProfileComponent,
     ChangePhotoDialogComponent,
+    ChangePassDialogComponent,
+    ChangeUsernameDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -82,6 +87,7 @@ import { ChangePhotoDialogComponent } from './components/modals/change-photo-dia
     MatInputModule,
     MatExpansionModule,
     MatListModule,
+    MatProgressBarModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
