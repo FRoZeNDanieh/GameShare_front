@@ -72,6 +72,19 @@
         padding-left: 0.75rem;
       }
 
+      input.ng-invalid.ng-touched {
+        border-color: red;
+      }
+
+      input.ng-invalid.ng-touched::placeholder {
+        color: red;
+      }
+
+      mat-error {
+        margin-top: -15px;
+        margin-bottom: 10px;
+      }
+
       input:focus {
         color: rgb(30, 119, 157);
         background-color: #ffffff;
@@ -93,6 +106,22 @@
       button:hover {
         background-color: rgb(30, 119, 157);
         border-color: rgb(40, 84, 137);
+      }
+
+      button:disabled {
+        background-color: #cccccc;
+        color: #666666;
+        cursor: not-allowed;
+      }
+
+      .login-link {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      .login-link a {
+        color: rgb(41, 171, 226);
       }
     }
   }

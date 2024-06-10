@@ -1,0 +1,20 @@
+<mat-dialog-content>
+  <div class="title-container">
+    <h2 class="title">Confirmar eliminación de cuenta</h2>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <p class="description">
+    ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede
+    deshacer.
+  </p>
+  <div class="button-container">
+    <button mat-raised-button class="custom-button-erase" (click)="onDeleteAccount()">
+      Eliminar cuenta
+    </button>
+    <button mat-raised-button class="custom-button" (click)="onClose()">
+      Cancelar
+    </button>
+  </div>
+</mat-dialog-content>

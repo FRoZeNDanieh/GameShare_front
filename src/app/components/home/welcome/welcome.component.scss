@@ -1,21 +1,39 @@
 .container {
   display: contents;
+}
 
-  .title {
-    padding-top: 1.5em;
-    text-align: center;
-    font-size: 5em;
-  }
+.title {
+  padding-top: 1.5em;
+  text-align: center;
+  font-size: 5em;
+}
 
-  .subtitle {
-    padding: 1.25em;
-    text-align: center;
-    font-size: 2em;
-  }
+.subtitle {
+  padding: 1.25em;
+  text-align: center;
+  font-size: 2em;
+}
 
-  .logo {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.games-list {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.game-item {
+  flex: 0 0 auto;
+  align-items: center;
+  border-right: 1px solid rgb(41, 171, 226);
+  padding: 10px;
+}
+
+.game-item h2 {
+  margin-right: 10px;
+  color: rgb(41, 171, 226);
+  font-size: 2em;
+}
+
+.game-item img {
+  max-width: 100%;
+  height: auto;
 }

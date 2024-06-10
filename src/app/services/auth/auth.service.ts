@@ -22,7 +22,7 @@ export class AuthService {
     private storage: AngularFireStorage,
     public router: Router,
     public ngZone: NgZone,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
   ) { }
 
   signIn(email: string, password: string) {
@@ -39,7 +39,7 @@ export class AuthService {
         console.error(error);
         this.snackBar.open('Correo electrónico y/o contraseña incorrectos', 'Cerrar', {
           duration: 3000,
-        })
+        });
       });
   }
 
@@ -48,15 +48,17 @@ export class AuthService {
       .createUserWithEmailAndPassword(email, password)
       .then(userData => {
 
-        const filePath = `ProfilePictures/${new Date().getTime()}_${photoUrl.name}`;
-        const fileRef = this.storage.ref(filePath);
+        if (photoUrl) {
+          const filePath = `ProfilePictures/${new Date().getTime()}_${photoUrl.name}`;
+          const fileRef = this.storage.ref(filePath);
 
-        this.storage.upload(filePath, photoUrl).then(() => {
-          fileRef.getDownloadURL().subscribe((url) => {
-            const userRef = this.afs.collection('usuarios').doc(userData.user.uid);
-            userRef.update({ photoURL: url })
-          })
-        })
+          this.storage.upload(filePath, photoUrl).then(() => {
+            fileRef.getDownloadURL().subscribe((url) => {
+              const userRef = this.afs.collection('usuarios').doc(userData.user.uid);
+              userRef.update({ photoURL: url })
+            });
+          });
+        }
 
         userData.user.updateProfile({
           displayName: username,
@@ -66,7 +68,16 @@ export class AuthService {
           this.router.navigate([RouteConstants.HOME_PAGE.path]);
         });
       }).catch((error) => {
-        window.alert(error.message);
+        let errorMessage: string;
+        if (error.code === 'auth/email-already-in-use') {
+          errorMessage = 'El correo electrónico ya está en uso';
+        } else {
+          errorMessage = 'Error al registrarse';
+        }
+        console.error(error);
+        this.snackBar.open(errorMessage, 'Cerrar', {
+          duration: 3000,
+        });
       });
   }
 

@@ -10,6 +10,9 @@ import { StatsTitles } from 'src/app/models/constants/StatsTitles';
 import { StatisticsService } from 'src/app/services/statistics/statistics.service';
 import { ChangePassDialogComponent } from '../modals/change-pass-dialog/change-pass-dialog.component';
 import { ChangeUsernameDialogComponent } from '../modals/change-username-dialog/change-username-dialog.component';
+import { DeleteAccountDialogComponent } from '../modals/delete-account-dialog/delete-account-dialog.component';
+import { Router } from '@angular/router';
+import { RouteConstants } from 'src/app/models/constants/route-constants';
 
 @Component({
   selector: 'app-profile',
@@ -27,7 +30,8 @@ export class ProfileComponent implements OnInit {
     private db: AngularFirestore,
     private statisticsService: StatisticsService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.afAuth.authState.subscribe(user => {
@@ -107,46 +111,47 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onDeleteAccount() {
-    const confirmDialog = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Confirmación',
-        message: '¿Estás seguro de que quieres eliminar tu cuenta?'
-      }
+  openDeleteAccountDialog() {
+    const dialogRef = this.dialog.open(DeleteAccountDialogComponent, {
+      width: '800px',
     });
 
-    confirmDialog.afterClosed().subscribe(result => {
+    return dialogRef.afterClosed().subscribe(result => {
       if (result === true) {
-        const secondConfirmDialog = this.dialog.open(ConfirmDialogComponent, {
-          data: {
-            title: 'Confirmación',
-            message: 'Por favor, confirma de nuevo. ¿Realmente quieres eliminar tu cuenta?'
-          }
-        });
-
-        secondConfirmDialog.afterClosed().subscribe(secondResult => {
-          if (secondResult === true) {
-            // Eliminar el documento del usuario en Firestore
-            this.db.collection('usuarios').doc(this.currentUser.uid).delete().then(() => {
-              // Eliminar al usuario en Firebase Authentication
-              this.currentUser.delete().then(() => {
-                this.snackBar.open('Cuenta eliminada correctamente', 'Cerrar', {
-                  duration: 2000,
-                });
-              }).catch(error => {
-                this.snackBar.open('Hubo un error al eliminar la cuenta: ' + error, 'Cerrar', {
-                  duration: 2000,
-                });
-              });
-            }).catch(error => {
-              this.snackBar.open('Hubo un error al eliminar los datos del usuario: ' + error, 'Cerrar', {
-                duration: 2000,
-              });
-            });
-          }
-        });
+        this.onDeleteAccount();
       }
     });
+  }
+
+
+  onDeleteAccount() {
+    if (this.currentUser) {
+
+      // Delete user document from Firestore
+      this.db.collection('usuarios').doc(this.currentUser.uid).delete()
+        .then(() => {
+          // User document deleted successfully from Firestore
+          // Now delete user from Authentication
+          return this.currentUser.delete();
+        })
+        .then(() => {
+          // User deleted successfully from Authentication
+          this.snackBar.open('La cuenta se ha eliminado correctamente', 'Cerrar', {
+            duration: 2000,
+          });
+          this.router.navigate([RouteConstants.LOGIN_PAGE.path]);
+        })
+        .catch((error) => {
+          // Error occurred either deleting user document from Firestore or deleting user from Authentication
+          let errorMessage = 'Hubo un error al eliminar la cuenta de Firestore';
+          if (error.code === 'auth/requires-recent-login') {
+            errorMessage = 'Hubo un error al eliminar la cuenta de Authentication';
+          }
+          this.snackBar.open(errorMessage, 'Cerrar', {
+            duration: 2000,
+          });
+        });
+    }
   }
 
 }

@@ -4,5 +4,23 @@
     Tu aplicación para el seguimiento de tus juegos favoritos
   </h2>
 
-  <img src="../../../assets/logo.png" alt="Logo" class="logo" />
+  <h2 class="subtitle">LOS MÁS JUGADOS ESTA SEMANA</h2>
+  <div class="games-list">
+    <ng-container *ngFor="let image of images1 | async; index as i">
+      <div class="game-item">
+        <h2>{{i + 1}}.</h2>
+        <img [src]="image" alt="Juego {{i + 1}}">
+      </div>
+    </ng-container>
+  </div>
+
+  <h2 class="subtitle">LOS MÁS ABANDONADOS ESTA SEMANA</h2>
+  <div class="games-list">
+    <ng-container *ngFor="let image of images1 | async; index as i">
+      <div class="game-item">
+        <h2>{{i + 1}}.</h2>
+        <img [src]="image" alt="Juego {{i + 1}}">
+      </div>
+    </ng-container>
+  </div>
 </div>

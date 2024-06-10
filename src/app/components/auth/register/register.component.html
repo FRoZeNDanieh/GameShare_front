@@ -24,21 +24,47 @@
           (change)="onFileSelected($event)"
           hidden
         />
+
         <input
+          [formControl]="email"
           type="text"
           placeholder="Correo electrónico"
           #userEmail
           required
         />
-        <input type="text" placeholder="Nombre de usuario" #userName required />
+        <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+          {{ getErrorMessage(email) }}
+        </mat-error>
+
         <input
+          [formControl]="username"
+          type="text"
+          placeholder="Nombre de usuario"
+          #userName
+          required
+        />
+        <mat-error
+          *ngIf="username.invalid && (username.dirty || username.touched)"
+        >
+          {{ getErrorMessage(username) }}
+        </mat-error>
+
+        <input
+          [formControl]="password"
           type="password"
           placeholder="Contraseña"
           #userPassword
           required
         />
+        <mat-error
+          *ngIf="password.invalid && (password.dirty || password.touched)"
+        >
+          {{ getErrorMessage(password) }}
+        </mat-error>
+
         <button
           mat-button
+          [disabled]="email.invalid || password.invalid || username.invalid"
           (click)="
             signUp(
               userEmail.value,
@@ -50,6 +76,9 @@
         >
           Regístrate
         </button>
+        <p class="login-link">
+          ¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a>
+        </p>
       </div>
     </div>
   </div>

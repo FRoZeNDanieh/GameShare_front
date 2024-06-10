@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
@@ -34,10 +33,10 @@ import { WelcomeComponent } from './components/home/welcome/welcome.component';
 import { ListComponent } from './components/list/list.component';
 import { FilterComponent } from './components/filter/filter.component';
 
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { FirebaseApp, initializeApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { getAuth, Auth } from '@angular/fire/auth';
+import { getFirestore, Firestore } from '@angular/fire/firestore';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 
 import { AuthService } from './services/auth/auth.service';
@@ -46,6 +45,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ChangePhotoDialogComponent } from './components/modals/change-photo-dialog/change-photo-dialog.component';
 import { ChangePassDialogComponent } from './components/modals/change-pass-dialog/change-pass-dialog.component';
 import { ChangeUsernameDialogComponent } from './components/modals/change-username-dialog/change-username-dialog.component';
+import { DeleteAccountDialogComponent } from './components/modals/delete-account-dialog/delete-account-dialog.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +64,7 @@ import { ChangeUsernameDialogComponent } from './components/modals/change-userna
     ChangePhotoDialogComponent,
     ChangePassDialogComponent,
     ChangeUsernameDialogComponent,
+    DeleteAccountDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +74,6 @@ import { ChangeUsernameDialogComponent } from './components/modals/change-userna
     MatIconModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MatSnackBarModule,
     MatMenuModule,
     MatCardModule,
@@ -87,16 +87,16 @@ import { ChangeUsernameDialogComponent } from './components/modals/change-userna
     MatInputModule,
     MatExpansionModule,
     MatListModule,
-    MatProgressBarModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
+    MatProgressBarModule
   ],
   providers: [AuthService,
     MatDatepickerModule,
     { provide: FIREBASE_OPTIONS, useValue: environment.firebase },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     { provide: LOCALE_ID, useValue: 'es' },
+    { provide: FirebaseApp, useFactory: () => initializeApp(environment.firebase) },
+    { provide: Auth, useFactory: () => getAuth() },
+    { provide: Firestore, useFactory: () => getFirestore() },
     DatePipe
   ],
   bootstrap: [AppComponent]

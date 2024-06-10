@@ -7,6 +7,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Game } from 'src/app/models/Game';
 import { EstadoJuego } from 'src/app/models/constants/EstadoJuego';
 import { GamesService } from 'src/app/services/games/games.service';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-game-card',
@@ -43,6 +44,7 @@ export class GameCardComponent implements OnInit {
       uid: game.uid,
       titulo: game.titulo,
       estado: EstadoJuego.Jugando,
+      ultActualizacion: firebase.firestore.FieldValue.serverTimestamp()
     })
       .then(() => {
         console.log("Document successfully written!");
@@ -56,7 +58,8 @@ export class GameCardComponent implements OnInit {
   changeEstado(game: Game, estado: EstadoJuego): void {
     this.afs.collection("usuarios").doc(this.currentUser.uid).collection("jugando").doc(game.uid).update(
       {
-        estado: estado
+        estado: estado,
+        ultActualizacion: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
         console.log("Document successfully updated!");
